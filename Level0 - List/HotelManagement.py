@@ -1,8 +1,10 @@
+adm = []
 cusinfo = []
 roomrent = []
 restaurent = []
 cusid = []
 gaming = []
+date = []
 fashion = []
 print(" JKET CONVENT SCHOOL ".center(82, "🌸"))
 print(" HOTEL MANAGEMENT SYSTEM ".center(84, "🌸"))
@@ -33,14 +35,10 @@ while True:
             "ENTER CUSTOMER IDENTIFICATION NUMBER / CUSTOMER ID:")
         customer_name = input("ENTER CUSTOMER NAME :")
         customer_address = input("ENTER CUSTOMER ADDRESS :")
-        customer_age = int(input("ENTER CUSTOMER AGE :"))
-        customer_country = input("ENTER CUSTOMER COUNTRY :")
         contact_number = int(input("ENTER CUSTOMER CONTACT NUMBER :"))
         cusid.append(customer_identification_number)
         cusinfo.append(customer_name)
         cusinfo.append(customer_address)
-        cusinfo.append(customer_age)
-        cusinfo.append(customer_country)
         cusinfo.append(contact_number)
         print("NEW CUSTOMER ENTERED IN THE SYSTEM SUCCESSFULLY !")
         print("")
@@ -54,18 +52,17 @@ while True:
                 input("ENTER CUSTOMER CHECKIN DATE [ YYYY-MM-DD ] :"))
             checkOUT = int(
                 input("ENTER CUSTOMER CHECKOUT DATE [ YYYY-MM-DD ] :"))
-            roomrent.append(checkIN)
-            roomrent.append(checkOUT)
+            date.append(checkIN)
+            date.append(checkOUT)
             print("CHECK-IN AND CHECK-OUT ENTRY MADED SUCCESSFULLY !")
+            nd = int(input(" ENTER NO. OF DAYS : "))
             print(" WE HAVE FOLLOWING ROOMS AVAILABLE FOR YOU NOW ".center(80, "#"))
             print("""1. ULTRA ROYAL ----> 10000 RS.
                         2. ROYAL       ----> 5000 RS.
                         3. ELITE       ----> 3500 RS.
-                        4. BUDGET      ----> 2500 USD""")
+                        4. BUDGET      ----> 2500 RS.""")
             option = int(input("ENTER YOUR OPTION : "))
             if option == 1:
-                crn = int(input("ENTER CUSTOMER ROOM NO : "))
-                nd = int(input(" ENTER NO. OF DAYS : "))
                 print("")
                 print("ULTRA ROYAL ROOM RENT :", 10000 * nd)
                 print("THANK YOU, YOUR ROOM HAS BEEN BOOKED FOR :", nd)
@@ -231,9 +228,11 @@ while True:
                 print("YOU WANT", buy, "BLEASER !!"
                       "SO YOUR TOTAL BILL IS :", fb)
                 fashion.append(fb)
+        else:
+            print("ERROR")
     elif choice == "6":
         cid6 = input("ENTER CUSTOMER ID :")
-        # print(cusinfo)
+        print(cusinfo)
         print("")
         print("******VRANDAVAN PLAZA******* CUSTOMER TOTAL BILLING*******")
         print("CUSTOMER NAME :", customer_name)
