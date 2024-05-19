@@ -1,7 +1,8 @@
 import os
 admins = [["Saksham", "123"]]
 customers = []
-login_admin = None
+logged_in_admin = None
+current_customer = None
 
 
 def register_admin():
@@ -23,7 +24,8 @@ def login_admin():
     for admin in admins:
         if admin[0] == username and admin[1] == password:
             print("Login successful!")
-
+            global logged_in_admin
+            logged_in_admin = username
             return True
     print("Invalid credentials! Please try again.")
     return False
@@ -55,10 +57,14 @@ def booking_record(customer):
     print("2. Royal - $3500")
     print("3. Elite - $2500")
     print("4. Common - $1500")
+    print("5. Go to Main Menu")
     choice = int(input("Enter your choice: "))
     prices = [5000, 3500, 2500, 1500]
     if 0 <= choice < len(prices):
         customer[3] = customer[3]+prices[choice-1]
+        print("Item added to your bill.")
+    else:
+        print()
 
 
 def restaurant_area(customer):
@@ -66,13 +72,14 @@ def restaurant_area(customer):
     print("1. Pizza - $10")
     print("2. Burger - $7")
     print("3. Salad - $5")
+    print("4. Go to Main Menu")
     choice = int(input("Enter your choice: "))
     prices = [10, 7, 5]
     if 0 <= choice < len(prices):
         customer[3] = customer[3]+prices[choice-1]
-        print("Item added to your bill. Current bill:", "$", customer[3])
+        print("Item added to your bill.")
     else:
-        print("Invalid choice! Please try again.")
+        print()
 
 
 def gaming_zone(customer):
@@ -80,13 +87,14 @@ def gaming_zone(customer):
     print("1. Carrom - $5")
     print("2. Chess - $3")
     print("3. Table Tennis - $8")
+    print("4. Go to Main Menu")
     choice = int(input("Enter your choice: "))
     prices = [5, 3, 8]
     if 0 <= choice < len(prices):
         customer[3] = customer[3]+prices[choice-1]
-        print("Game added to your bill. Current bill:", "$", customer[3])
+        print("Game added to your bill.")
     else:
-        print("Invalid choice! Please try again.")
+        print()
 
 
 def calculate_total_bill(customer):
@@ -109,28 +117,44 @@ def handle_customer(customer):
             calculate_total_bill(customer)
         elif choice == '5':
             print("Exiting customer area...")
+            global current_customer
+            current_customer = None
             break
         else:
             print("Invalid choice! Please try again.")
 
 
 while True:
-    # if condition needed where we are check admin is login or not
-    print("\n--- Welcome to Hotel Management System ---")
-    print("1. Admin Login")
-    print("2. Admin Register")
-    print("3. Exit")
+    if not logged_in_admin:
+        print("\n--- Welcome to Hotel Management System ---")
+        print("1. Admin Login")
+        print("2. Admin Register")
+        print("3. Exit")
 
-    option = input("Enter your choice: ")
+        option = input("Enter your choice: ")
 
-    if option == '1':
-        if login_admin():
-            customer = collect_customer_details()
-            handle_customer(customer)
-    elif option == '2':
-        register_admin()
-    elif option == '3':
-        print("Exiting the system...")
-        os.exit()
+        if option == '1':
+            login_admin()
+        elif option == '2':
+            register_admin()
+            handle_customer()
+        elif option == '3':
+            print("Exiting the system...")
+            os.exit()
+        else:
+            print("Invalid choice! Please try again.")
+
     else:
-        print("Invalid choice! Please try again.")
+        if current_customer == None:
+            print("1. Add a New Customer")
+            print("2. Logout")
+            print("3. Exit")
+            option = input("Enter your choice: ")
+            if option == '1':
+                current_customer = collect_customer_details()
+            elif option == '2':
+                logged_in_admin = None
+            else:
+                os.exit()
+        else:
+            handle_customer(current_customer)
