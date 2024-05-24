@@ -1,8 +1,21 @@
 import os
-admins = [["Saksham", "123"]]
-customers = []
 logged_in_admin = None
 current_customer = None
+
+
+def add_admin(username, password):
+    with open('admins.txt', 'a') as f:
+        f.write(username+","+password+"\n")
+        print("Username and password are append successfully!")
+
+
+def read_userpass(username, password):
+    with open("admins.txt", "r") as file:
+        for line in file:
+            stored_username, stored_password = line.strip.split(",")
+            if stored_username == username and stored_password == password:
+                return True
+    return False
 
 
 def clearConsole():
@@ -13,24 +26,18 @@ def register_admin():
     print("\n--- Admin Registration ---")
     username = input("Enter username: ")
     password = input("Enter password: ")
-    for admin in admins:
-        if admin[0] == username:
-            print("Username already exists! Try logging in.")
-            return
-    admins.append([username, password])
-    print("Admin registered successfully!")
+    add_admin(username, password)
 
 
 def login_admin():
     print("\n--- Admin Login ---")
     username = input("Enter username: ")
     password = input("Enter password: ")
-    for admin in admins:
-        if admin[0] == username and admin[1] == password:
-            print("Login successful!")
-            global logged_in_admin
-            logged_in_admin = username
-            return True
+    if read_userpass:
+        print("Login Successfully!")
+        global logged_in_admin
+        logged_in_admin = username
+        return True
     print("Invalid credentials! Please try again.")
     return False
 
