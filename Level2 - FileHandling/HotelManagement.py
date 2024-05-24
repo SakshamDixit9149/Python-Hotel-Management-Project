@@ -18,6 +18,12 @@ def read_userpass(username, password):
     return False
 
 
+def append_cus_data(name, address, contact):
+    with open("customers.txt", "a") as file:
+        file.write(name+","+address+","+contact+"\n")
+        print("Customer Details successfully entered in system")
+
+
 def clearConsole():
     return os.system('clear')
 
@@ -53,10 +59,7 @@ def collect_customer_details():
     name = input("Enter customer name: ")
     address = input("Enter customer address: ")
     contact = input("Enter contact number: ")
-    customer = [name, address, contact, 0]
-    customers.append(customer)
-    print("Customer details recorded successfully!")
-    return customer
+    append_cus_data(name, address, contact)
 
 
 def show_menu():
