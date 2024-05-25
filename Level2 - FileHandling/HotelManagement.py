@@ -1,27 +1,36 @@
 import os
 logged_in_admin = None
 current_customer = None
+filepath = "Level2 - FileHandling"
+admin_filename = os.path.join(filepath, "admins.txt")
 
 
 def add_admin(username, password):
-    with open('admins.txt', 'a') as f:
+    with open(admin_filename, "a") as f:
         f.write(username+","+password+"\n")
         print("Username and password are append successfully!")
 
 
 def read_userpass(username, password):
-    with open("admins.txt", "r") as file:
+    with open(admin_filename, "r") as file:
         for line in file:
-            stored_username, stored_password = line.strip.split(",")
+            stored_username, stored_password = line.strip().split(",")
             if stored_username == username and stored_password == password:
                 return True
     return False
 
 
 def append_cus_data(name, address, contact):
-    with open("customers.txt", "a") as file:
-        file.write(name+","+address+","+contact+"\n")
-        print("Customer Details successfully entered in system")
+    global filepath
+    if os.path.exists(filepath):
+        name = input("Enter the name again :")
+    else:
+        os.mkdir(os.path.join(filepath, name))
+        with open(os.path.join(filepath, name, "customers.txt"), "w") as file:
+            file.write(name+","+address+","+contact+"\n")
+            print("Customer Details successfully entered in system")
+            global current_customer
+            current_customer = name
 
 
 def clearConsole():
@@ -39,7 +48,7 @@ def login_admin():
     print("\n--- Admin Login ---")
     username = input("Enter username: ")
     password = input("Enter password: ")
-    if read_userpass:
+    if read_userpass(username, password):
         print("Login Successfully!")
         global logged_in_admin
         logged_in_admin = username
@@ -60,6 +69,7 @@ def collect_customer_details():
     address = input("Enter customer address: ")
     contact = input("Enter contact number: ")
     append_cus_data(name, address, contact)
+    return name
 
 
 def show_menu():
@@ -167,7 +177,6 @@ while True:
 
     else:
         if current_customer == None:
-            clearConsole()
             print("Welcome,", logged_in_admin)
             print("1. Add a New Customer")
             print("2. Add a Admin ")
@@ -182,6 +191,7 @@ while True:
                 case '3':
                     logout_admin()
                 case '4':
+                    print("Exiting Program...")
                     os._exit(1)
                 case _:
                     print("Invalid choice! Please try again.")
