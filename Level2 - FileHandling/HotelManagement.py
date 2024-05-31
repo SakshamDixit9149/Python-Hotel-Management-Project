@@ -20,21 +20,37 @@ def read_userpass(username, password):
     return False
 
 
+def adding_prices(customer_name, items, prices):
+    customer_file = os.path.join(filepath, customer_name, "Prices.txt")
+    with open(customer_file, "a") as file:
+        file.write(items+":$"+str(prices)+"\n")
+        print(f"Added{items} with price ${prices} to {customer_name}'s file.")
+
+
 def append_cus_data(name, address, contact):
     global filepath
-    if os.path.exists(filepath):
-        name = input("Enter the name again :")
-    else:
-        os.mkdir(os.path.join(filepath, name))
-        with open(os.path.join(filepath, name, "customers.txt"), "w") as file:
-            file.write(name+","+address+","+contact+"\n")
-            print("Customer Details successfully entered in system")
-            global current_customer
-            current_customer = name
+    while os.path.exists(os.path.join(filepath, name)):
+        name = input(
+            "The Name you Entered already exists. Enter a different Name :")
+    os.mkdir(os.path.join(filepath, name))
+    with open(os.path.join(filepath, name, "customers.txt"), "w") as file:
+        file.write(name+","+address+","+contact+"\n")
+        print("Customer Details successfully entered in system")
+        global current_customer
+        current_customer = name
 
 
 def clearConsole():
     return os.system('clear')
+
+
+def show_history(customer):
+    print("---Customer History---")
+    customer_file = os.path.join(filepath, customer, "Prices.txt")
+    with open(customer_file) as file:
+        lines = file.readlines()
+        for line in lines:
+            print(line.strip())
 
 
 def register_admin():
@@ -80,7 +96,8 @@ def show_menu():
     print("2. Restaurant Area")
     print("3. Gaming Zone")
     print("4. Calculate Total Bill")
-    print("5. Exit")
+    print("5. Show History")
+    print("6. Exit")
 
 
 def booking_record(customer):
@@ -92,8 +109,9 @@ def booking_record(customer):
     print("5. Go to Main Menu")
     choice = int(input("Enter your choice: "))
     prices = [5000, 3500, 2500, 1500]
+    items = ["Ultra Royal", "Royal", "Elite", "Common"]
     if 0 <= choice < len(prices):
-        customer[3] = customer[3]+prices[choice-1]
+        adding_prices(customer, items[choice-1], prices[choice-1])
         print("Item added to your bill.")
     else:
         print()
@@ -107,8 +125,9 @@ def restaurant_area(customer):
     print("4. Go to Main Menu")
     choice = int(input("Enter your choice: "))
     prices = [10, 7, 5]
+    items = ["Pizza", "Burger", "Salad"]
     if 0 <= choice < len(prices):
-        customer[3] = customer[3]+prices[choice-1]
+        adding_prices(customer, items[choice-1], prices[choice-1])
         print("Item added to your bill.")
     else:
         print()
@@ -122,17 +141,25 @@ def gaming_zone(customer):
     print("4. Go to Main Menu")
     choice = int(input("Enter your choice: "))
     prices = [5, 3, 8]
+    items = ["Carrom", "chese", "Table Tennis"]
     if 0 <= choice < len(prices):
-        customer[3] = customer[3]+prices[choice-1]
+        adding_prices(customer, items[choice-1], prices[choice-1])
         print("Game added to your bill.")
     else:
         print()
 
 
 def calculate_total_bill(customer):
-    print("\n--- Total Bill ---")
-    print(f"Customer Name: {customer[0]}")
-    print(f"Total Bill: ${customer[3]}")
+    print("---Total Bill---")
+    customer_file = os.path.join(filepath, customer, "Prices.txt")
+    total_bill = 0
+    with open(customer_file, "r")as file:
+        lines = file.readlines()
+        for line in lines[1:]:
+            items, prices = line.split(":$")
+            total_bill += int(prices.strip())
+    print(f"Customer Name :{customer}")
+    print(f"Total Bill :${total_bill}")
 
 
 def handle_customer(customer):
@@ -150,6 +177,8 @@ def handle_customer(customer):
                 calculate_total_bill(customer)
                 input("Press enter to go back!")
             case '5':
+                show_history(customer)
+            case '6':
                 print("Exiting customer area...")
                 global current_customer
                 current_customer = None
@@ -174,7 +203,7 @@ while True:
                 os._exit(1)
             case _:
                 print("Invalid choice! Please try again.")
-
+        clearConsole()
     else:
         if current_customer == None:
             print("Welcome,", logged_in_admin)
