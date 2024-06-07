@@ -83,22 +83,25 @@ def print_formatted_history(customer):
                 restaurant_bill.append(f"{item}: ${price}")
 
     if booking_bill:
-        print("Booking Bill")
+        print("\nBooking Bill")
+        print("🔖🔖🔖🔖🔖🔖🔖")
         for item in booking_bill:
             print(item)
 
     if gaming_bill:
         print("\nGaming Bill")
+        print("🎮🎮🎮🎮🎮🎮")
         for item in gaming_bill:
             print(item)
 
     if restaurant_bill:
         print("\nRestaurant Bill")
+        print("💵💵💵💵💵💵💵💵")
         for item in restaurant_bill:
             print(item)
-    print("~~~~~~")
+    print("~~~~~~~")
     print("Total")
-    print("~~~~~~")
+    print("~~~~~~~")
     print(f"Grand Bill\nTotal: ${total_amount}")
 
 
